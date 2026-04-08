@@ -1,10 +1,90 @@
 
+/* Variables para modo claro */
+:root {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --nav-bg: #000000;
+    --card-bg: #ffffff;
+    --btn-bg: #2196f3;
+}
+
+/* Modo oscuro */
+.dark-mode {
+    --bg-color: #121212;
+    --text-color: #ffffff;
+    --nav-bg: #1e1e1e;
+    --card-bg: #1e1e1e;
+    --btn-bg: #bb86fc;
+}
+
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: #f5f5f5;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+nav .nav-wrapper {
+    background-color: var(--nav-bg) !important;
+}
+
+.card {
+    background-color: var(--card-bg) !important;
+    color: var(--text-color) !important;
+}
+
+.btn {
+    background-color: var(--btn-bg) !important;
+}
+
+.card-panel {
+    background-color: var(--card-bg) !important;
+    color: var(--text-color) !important;
+}
+
+.material-icons {
+    color: var(--text-color) !important;
+}
+
+.input-field label {
+    color: var(--text-color) !important;
+}
+
+input[type=text],
+input[type=email],
+input[type=password] {
+    color: var(--text-color) !important;
+    background-color: var(--bg-color) !important;
+}
+
+input[type=text]:focus,
+input[type=email]:focus,
+input[type=password]:focus {
+    border-bottom-color: var(--btn-bg) !important;
+    box-shadow: 0 1px 0 0 var(--btn-bg) !important;
+}
+
+.toggle-btn {
+    background: rgba(0, 0, 0, 0.1);
+    border: none;
+    color: var(--text-color);
+    font-size: 24px;
+    cursor: pointer;
+    margin-left: 10px;
+    padding: 10px;
+    border-radius: 50%;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.dark-mode .toggle-btn {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.toggle-btn:hover {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
 }
 
 #scroll{
