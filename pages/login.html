@@ -15,19 +15,19 @@
 <body>
 
     <div class="row" style="width:100%; max-width:400px;">
-        <form class="col s12 card-panel">
+        <form action="../php/login.php" method="POST" class="col s12 card-panel">
 
             <h5 class="center-align">Iniciar Sesión</h5>
 
             <div class="input-field">
                 <i class="material-icons prefix">email</i>
-                <input id="email_login" type="email" required>
+                <input id="email_login" name="email" type="email" required>
                 <label for="email_login">Correo electrónico</label>
             </div>
 
             <div class="input-field">
                 <i class="material-icons prefix">lock</i>
-                <input id="password_login" type="password" required>
+                <input id="password_login" name="password" type="password" required>
                 <label for="password_login">Contraseña</label>
             </div>
 
