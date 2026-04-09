@@ -53,11 +53,13 @@ if (!isset($_SESSION["usuario_id"])) {
 
     <main>
         <div class="container">
-            <h4 class="left-align">Datos del Usuario</h4>
+            <h4 class="left-align">Bienvenido, <?php echo htmlspecialchars($_SESSION["usuario_nombre"]); ?></h4>
+            <h5 class="left-align">Datos del Usuario</h5>
 
             <div class="card-panel">
-                <p><strong>Nombre:</strong> <?php echo htmlspecialchars($_SESSION["usuario_nombre"]); ?></p>
+                <p><strong>Nombre completo:</strong> <?php echo htmlspecialchars(trim($_SESSION["usuario_nombre"] . ' ' . ($_SESSION["usuario_apellido"] ?? ''))); ?></p>
                 <p><strong>Email:</strong> <?php echo htmlspecialchars($_SESSION["usuario_email"]); ?></p>
+                <p><strong>ID usuario:</strong> <?php echo htmlspecialchars($_SESSION["usuario_id"]); ?></p>
             </div>
         </div>
 
