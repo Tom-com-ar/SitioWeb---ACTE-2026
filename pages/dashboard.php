@@ -27,7 +27,7 @@ if (!isset($_SESSION["usuario_id"])) {
                 <div class="container">
                     <a href="../index.html" class="brand-logo">ACTE-2026</a>
 
-                    <a href="#" data-target="mobile-demo" class="sidenav-trigger">
+                    <a href="#" data-target="mobile-demo" class="sidenav-trigger hide-on-large-only">
                         <i class="material-icons">menu</i>
                     </a>
 

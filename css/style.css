@@ -25,6 +25,87 @@ body {
 
 nav .nav-wrapper {
     background-color: var(--nav-bg) !important;
+    padding-left: clamp(0.75rem, 2.5vw, 1.5rem);
+    padding-right: clamp(0.75rem, 2.5vw, 1.5rem);
+    box-sizing: border-box;
+}
+
+/* Navbar desktop: una sola línea sin solapar logo (Materialize usa brand-logo absoluto + ul flotada) */
+@media only screen and (min-width: 993px) {
+    nav .nav-wrapper {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+    }
+
+    nav .nav-wrapper > .container {
+        flex: 1 1 auto;
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+    }
+
+    nav .brand-logo {
+        position: relative;
+        left: auto;
+        top: auto;
+        transform: none;
+        flex: 0 0 auto;
+        margin-right: 0.5rem;
+        line-height: 1.25;
+        height: auto;
+        padding: 0;
+        font-size: clamp(1.35rem, 1.1rem + 1vw, 2.1rem);
+    }
+
+    nav .nav-wrapper .container > ul.right.hide-on-med-and-down {
+        float: none;
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: flex-end;
+        flex: 1 1 auto;
+        min-width: 0;
+        margin-left: auto;
+        height: auto;
+        line-height: normal;
+    }
+
+    nav .nav-wrapper .container > ul.right.hide-on-med-and-down > li {
+        float: none;
+    }
+
+    nav .nav-wrapper .container > ul.right.hide-on-med-and-down > li > a:not(.btn) {
+        display: inline-flex;
+        align-items: center;
+        line-height: 1.2;
+        padding: 0 12px;
+        white-space: nowrap;
+    }
+
+    nav .nav-wrapper .container > ul.right.hide-on-med-and-down > li > a.btn {
+        margin: 0 3px;
+    }
+}
+
+/* Ajuste extra en anchuras “large” estrechas (p. ej. 1024px): texto y botones más compactos */
+@media only screen and (min-width: 993px) and (max-width: 1264px) {
+    nav .nav-wrapper .container > ul.right.hide-on-med-and-down > li > a:not(.btn) {
+        font-size: 0.88rem;
+        padding: 0 8px;
+    }
+
+    nav .nav-wrapper .container > ul.right.hide-on-med-and-down > li > a.btn {
+        font-size: 0.68rem;
+        padding: 0 10px;
+        height: 30px;
+        line-height: 30px;
+    }
+}
+
+nav .nav-wrapper > .toggle-btn {
+    flex-shrink: 0;
 }
 
 .card {
