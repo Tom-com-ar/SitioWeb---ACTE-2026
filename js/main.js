@@ -24,17 +24,23 @@ function loadDarkMode() {
     updateToggleIcon();
 }
 
-// Agregar botón de alternancia
+// Agregar botón de alternancia (menú hamburguesa si existe; si no, flotante)
 function addToggleButton() {
-    const nav = document.querySelector('.nav-wrapper');
-    let toggleBtn = document.createElement('button');
+    const sidenav = document.querySelector('.sidenav');
+    const toggleBtn = document.createElement('button');
+    toggleBtn.type = 'button';
     toggleBtn.innerHTML = '🌙';
     toggleBtn.classList.add('toggle-btn');
+    toggleBtn.setAttribute('aria-label', 'Cambiar entre modo claro y oscuro');
     toggleBtn.addEventListener('click', toggleDarkMode);
 
-    if (nav) {
-        nav.appendChild(toggleBtn);
+    if (sidenav) {
+        toggleBtn.classList.add('toggle-btn--sidenav');
+        const li = document.createElement('li');
+        li.appendChild(toggleBtn);
+        sidenav.appendChild(li);
     } else {
+        toggleBtn.classList.add('toggle-btn--floating');
         toggleBtn.style.position = 'fixed';
         toggleBtn.style.top = '20px';
         toggleBtn.style.right = '20px';

@@ -104,7 +104,29 @@ nav .nav-wrapper {
     }
 }
 
-nav .nav-wrapper > .toggle-btn {
+/* Tema: dentro del sidenav (móvil / tablet) */
+.sidenav .toggle-btn--sidenav {
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    text-align: left;
+    padding: 0 32px;
+    height: 48px;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.sidenav .toggle-btn--sidenav:hover {
+    background: rgba(0, 0, 0, 0.06);
+}
+
+.dark-mode .sidenav .toggle-btn--sidenav:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.toggle-btn--floating {
     flex-shrink: 0;
 }
 
