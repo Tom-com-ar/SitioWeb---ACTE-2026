@@ -19,6 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         $_SESSION["usuario_id"] = $usuario["id"];
         $_SESSION["usuario_nombre"] = $usuario["nombre"];
+        $_SESSION["usuario_apellido"] = $usuario["apellido"];
         $_SESSION["usuario_email"] = $usuario["email"];
 
         header("Location: ../pages/dashboard.php");
