@@ -126,6 +126,11 @@ nav .nav-wrapper > .toggle-btn {
     color: var(--text-color) !important;
 }
 
+/* Barra siempre oscura: los Material Icons deben contrastar (evita menú invisible en modo claro) */
+nav .nav-wrapper .material-icons {
+    color: #ffffff !important;
+}
+
 .input-field label {
     color: var(--text-color) !important;
 }
