@@ -1,3 +1,7 @@
+<?php
+session_start();
+$usuarioLogueado = isset($_SESSION["usuario_id"]);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +13,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-
+    <script>
+        const usuarioLogueado = <?php echo $usuarioLogueado ? 'true' : 'false'; ?>;
+    </script>
 </head>
 
 <body>
@@ -28,9 +34,12 @@
                         <li><a href="#talleres">Talleres</a></li>
                         <li><a href="#actividades">Actividades</a></li>
                         <li><a href="#contacto">Contacto</a></li>
-                        <li><a class="waves-effect blue btn neon-btn" href="pages/login.html">Iniciar Sesión</a></li>
-                        <li><a class="waves-effect blue btn neon-btn" href="pages/registro.html">Registrarse</a></li>
-                        <li><a class="waves-effect orange btn neon-btn" href="pages/dashboard.php">Perfil Usuario</a></li>
+                        <?php if (!$usuarioLogueado): ?>
+                            <li><a class="waves-effect blue btn neon-btn" href="pages/login.html">Iniciar Sesión</a></li>
+                            <li><a class="waves-effect blue btn neon-btn" href="pages/registro.html">Registrarse</a></li>
+                        <?php else: ?>
+                            <li><a class="waves-effect orange btn neon-btn" href="pages/dashboard.php">Perfil Usuario</a></li>
+                        <?php endif; ?>
                     </ul>
                 </div>
             </div>
@@ -41,9 +50,12 @@
             <li><a href="#talleres">Talleres</a></li>
             <li><a href="#actividades">Actividades</a></li>
             <li><a href="#contacto">Contacto</a></li>
-            <li><a class="waves-effect orange btn neon-btn" href="pages/dashboard.php">Perfil Usuario</a></li>
-            <li><a class="waves-effect blue btn neon-btn" href="pages/login.html">Iniciar Sesión</a></li>
-            <li><a class="waves-effect blue btn neon-btn" href="pages/registro.html">Registrarse</a></li>
+            <?php if (!$usuarioLogueado): ?>
+                <li><a class="waves-effect blue btn neon-btn" href="pages/login.html">Iniciar Sesión</a></li>
+                <li><a class="waves-effect blue btn neon-btn" href="pages/registro.html">Registrarse</a></li>
+            <?php else: ?>
+                <li><a class="waves-effect orange btn neon-btn" href="pages/dashboard.php">Perfil Usuario</a></li>
+            <?php endif; ?>
         </ul>
     </header>
 
@@ -57,38 +69,8 @@
         <div class="container" id="actividades">
             <h4 class="center-align">Actividades</h4>
 
-            <div class="row">
+            <div class="row" id="contenedorActividades"></div>
 
-                <div class="col s12 m6 l4">
-                    <div class="card hoverable">
-                        <div class="card-image">
-                            <img src="https://via.placeholder.com/300x200?text=Actividad+1" alt="Actividad 1">
-                        </div>
-                        <div class="card-content">
-                            <span class="card-title">Actividad 1</span>
-                            <p>Descripción de la actividad 1.</p>
-                        </div>
-                        <div class="card-action">
-                            <a href="#">Más información</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col s12 m6 l4">
-                    <div class="card hoverable">
-                        <div class="card-image">
-                            <img src="https://via.placeholder.com/300x200?text=Actividad+2" alt="Actividad 2">
-                        </div>
-                        <div class="card-content">
-                            <span class="card-title">Actividad 2</span>
-                            <p>Descripción de la actividad 2.</p>
-                        </div>
-                        <div class="card-action">
-                            <a href="#">Más información</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <div class="container" id="inscripcion">
@@ -119,6 +101,12 @@
                                 <p><strong>Seleccionar talleres:</strong></p>
 
                                 <div id="listaTalleres"></div>
+
+                                <br>
+
+                                <p><strong>Seleccionar actividades:</strong></p>
+
+                                <div id="listaActividades"></div>
 
                                 <br>
 

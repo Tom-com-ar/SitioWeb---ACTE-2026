@@ -1,10 +1,32 @@
 <?php
 session_start();
+require_once "../php/conexion.php";
 
 if (!isset($_SESSION["usuario_id"])) {
     header("Location: login.html");
     exit;
 }
+
+$usuario_id = $_SESSION["usuario_id"];
+
+$stmt = $conexion->prepare(
+    "SELECT i.id, i.nombre, i.email, i.telefono, t.nombre AS taller_nombre
+     FROM inscripciones i
+     LEFT JOIN talleres t ON i.taller_id = t.id
+     WHERE i.usuario_id = ?"
+);
+$stmt->execute([$usuario_id]);
+$inscripciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$stmtActividades = $conexion->prepare(
+    "SELECT a.id, ac.nombre, ac.descripcion, t.nombre AS taller_nombre
+     FROM actividad_inscripciones a
+     LEFT JOIN actividades ac ON a.actividad_id = ac.id
+     LEFT JOIN talleres t ON ac.taller_id = t.id
+     WHERE a.usuario_id = ?"
+);
+$stmtActividades->execute([$usuario_id]);
+$actividades_inscritas = $stmtActividades->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -25,17 +47,17 @@ if (!isset($_SESSION["usuario_id"])) {
         <nav>
             <div class="nav-wrapper black">
                 <div class="container">
-                    <a href="../index.html" class="brand-logo">ACTE-2026</a>
+                    <a href="../index.php" class="brand-logo">ACTE-2026</a>
 
                     <a href="#" data-target="mobile-demo" class="sidenav-trigger hide-on-large-only">
                         <i class="material-icons">menu</i>
                     </a>
 
                     <ul class="right hide-on-med-and-down">
-                        <li><a href="../index.html">Inicio</a></li>
-                        <li><a href="../index.html#talleres">Talleres</a></li>
-                        <li><a href="../index.html#actividades">Actividades</a></li>
-                        <li><a href="../index.html#contacto">Contacto</a></li>
+                        <li><a href="../index.php">Inicio</a></li>
+                        <li><a href="../index.php#talleres">Talleres</a></li>
+                        <li><a href="../index.php#actividades">Actividades</a></li>
+                        <li><a href="../index.php#contacto">Contacto</a></li>
                         <li><a class="waves-effect red btn" href="../php/logout.php">Cerrar Sesión</a></li>
                     </ul>
                 </div>
@@ -43,10 +65,10 @@ if (!isset($_SESSION["usuario_id"])) {
         </nav>
 
         <ul class="sidenav" id="mobile-demo">
-            <li><a href="../index.html">Inicio</a></li>
-            <li><a href="../index.html#talleres">Talleres</a></li>
-            <li><a href="../index.html#actividades">Actividades</a></li>
-            <li><a href="../index.html#contacto">Contacto</a></li>
+            <li><a href="../index.php">Inicio</a></li>
+            <li><a href="../index.php#talleres">Talleres</a></li>
+            <li><a href="../index.php#actividades">Actividades</a></li>
+            <li><a href="../index.php#contacto">Contacto</a></li>
             <li><a class="waves-effect red btn" href="../php/logout.php">Cerrar Sesión</a></li>
         </ul>
     </header>
@@ -67,7 +89,71 @@ if (!isset($_SESSION["usuario_id"])) {
             <h4 class="left-align">Inscripciones</h4>
 
             <div class="card-panel">
-                <p>No hay inscripciones registradas todavía.</p>
+                <?php if (!empty($inscripciones)): ?>
+                    <table class="highlight responsive-table">
+                        <thead>
+                            <tr>
+                                <th>Taller</th>
+                                <th>Nombre</th>
+                                <th>Email</th>
+                                <th>Teléfono</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($inscripciones as $inscripcion): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($inscripcion['taller_nombre'] ?? 'No definido'); ?></td>
+                                    <td><?php echo htmlspecialchars($inscripcion['nombre']); ?></td>
+                                    <td><?php echo htmlspecialchars($inscripcion['email']); ?></td>
+                                    <td><?php echo htmlspecialchars($inscripcion['telefono']); ?></td>
+                                    <td>
+                                        <form method="POST" action="../php/cancel_inscripcion.php" style="display:inline;">
+                                            <input type="hidden" name="inscripcion_id" value="<?php echo htmlspecialchars($inscripcion['id']); ?>">
+                                            <button class="waves-effect waves-light btn red" type="submit" onclick="return confirm('¿Cancelar esta inscripción?');">Cancelar</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php else: ?>
+                    <p>No hay inscripciones registradas todavía.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <div class="container">
+            <h4 class="left-align">Inscripciones a Actividades</h4>
+
+            <div class="card-panel">
+                <?php if (!empty($actividades_inscritas)): ?>
+                    <table class="highlight responsive-table">
+                        <thead>
+                            <tr>
+                                <th>Taller</th>
+                                <th>Actividad</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($actividades_inscritas as $actividad): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($actividad['taller_nombre'] ?? 'No definido'); ?></td>
+                                    <td><?php echo htmlspecialchars($actividad['nombre']); ?></td>
+                                    <td>
+                                        <form method="POST" action="../php/cancel_actividad_inscripcion.php" style="display:inline;">
+                                            <input type="hidden" name="actividad_inscripcion_id" value="<?php echo htmlspecialchars($actividad['id']); ?>">
+                                            <button class="waves-effect waves-light btn red" type="submit" onclick="return confirm('¿Cancelar esta inscripción de actividad?');">Cancelar</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php else: ?>
+                    <p>No hay actividades registradas todavía.</p>
+                <?php endif; ?>
             </div>
         </div>
     </main>

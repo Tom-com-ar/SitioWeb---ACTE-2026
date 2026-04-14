@@ -95,6 +95,12 @@ document.addEventListener('DOMContentLoaded', () => {
     addToggleButton();
     validarRegistro();
     mostrarErroresURL();
+    cargarTalleres();
+    cargarActividades();
+    initFormulario();
+    cargarTalleresCards();
+    cargarActividadesCards();
+    window.addEventListener('online', sincronizar);
 });
 
 
@@ -135,14 +141,84 @@ function cargarTalleres() {
                     </p>
                 `;
             });
+
+            document.querySelectorAll("#listaTalleres input[type=checkbox]").forEach(cb => {
+                cb.addEventListener('change', updateActividadCheckboxes);
+            });
+            updateActividadCheckboxes();
         });
+}
+
+function cargarActividades() {
+    fetch("php/obtener_actividades.php")
+        .then(res => res.json())
+        .then(data => {
+            const cont = document.getElementById("listaActividades");
+            if (!cont) return;
+            cont.innerHTML = "";
+
+            const actividadesPorTaller = data.reduce((acc, actividad) => {
+                if (!acc[actividad.taller_id]) {
+                    acc[actividad.taller_id] = {
+                        taller_nombre: actividad.taller_nombre,
+                        items: []
+                    };
+                }
+                acc[actividad.taller_id].items.push(actividad);
+                return acc;
+            }, {});
+
+            Object.entries(actividadesPorTaller).forEach(([tallerId, grupo]) => {
+                cont.innerHTML += `<p><strong>${grupo.taller_nombre}</strong></p>`;
+                grupo.items.forEach(actividad => {
+                    cont.innerHTML += `
+                        <p>
+                            <label>
+                                <input type="checkbox" class="actividad-checkbox" data-taller-id="${tallerId}" value="${actividad.id}" disabled />
+                                <span>${actividad.nombre}</span>
+                            </label>
+                        </p>
+                    `;
+                });
+            });
+
+            updateActividadCheckboxes();
+        });
+}
+
+function updateActividadCheckboxes() {
+    const selectedTalleres = Array.from(document.querySelectorAll("#listaTalleres input:checked")).map(cb => cb.value);
+    document.querySelectorAll("#listaActividades input.actividad-checkbox").forEach(cb => {
+        const tallerId = cb.dataset.tallerId;
+        if (selectedTalleres.includes(tallerId)) {
+            cb.disabled = false;
+        } else {
+            cb.checked = false;
+            cb.disabled = true;
+        }
+    });
 }
 
 
 function initFormulario() {
 
     const form = document.getElementById("formInscripcion");
+    const submitButton = form ? form.querySelector('button[type="submit"]') : null;
+
     if (!form) return;
+
+    if (typeof usuarioLogueado !== 'undefined' && !usuarioLogueado) {
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.textContent = 'Inicia sesión para inscribirte';
+        }
+        form.addEventListener("submit", e => {
+            e.preventDefault();
+            alert("Debes iniciar sesión para inscribirte a los talleres.");
+            window.location.href = 'pages/login.html';
+        });
+        return;
+    }
 
     form.addEventListener("submit", e => {
         e.preventDefault();
@@ -155,7 +231,11 @@ function initFormulario() {
         document.querySelectorAll("#listaTalleres input:checked")
             .forEach(cb => talleres.push(cb.value));
 
-        const data = { nombre, email, telefono, talleres };
+        const actividades = [];
+        document.querySelectorAll("#listaActividades input:checked")
+            .forEach(cb => actividades.push(cb.value));
+
+        const data = { nombre, email, telefono, talleres, actividades };
 
         if (navigator.onLine) {
             enviarServidor(data);
@@ -174,8 +254,19 @@ function enviarServidor(data) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data)
     })
-        .then(res => res.text())
-        .then(() => alert("Inscripción exitosa"));
+        .then(res => res.text().then(text => {
+            if (!res.ok) {
+                throw new Error(text || 'Error al enviar la inscripción');
+            }
+            return text;
+        }))
+        .then(() => {
+            alert("Inscripción exitosa");
+            document.getElementById("formInscripcion").reset();
+        })
+        .catch(error => {
+            alert(error.message || "Error al inscribir");
+        });
 }
 
 
@@ -196,14 +287,6 @@ function sincronizar() {
         }
     };
 }
-
-
-document.addEventListener("DOMContentLoaded", () => {
-    cargarTalleres();
-    initFormulario();
-
-    window.addEventListener("online", sincronizar);
-});
 
 
 function cargarTalleresCards() {
@@ -236,8 +319,41 @@ function cargarTalleresCards() {
                                 <p>${t.descripcion}</p>
                             </div>
 
-                            <div class="card-action">
-                                <a href="#">Más información</a>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+}
+
+function cargarActividadesCards() {
+
+    fetch("php/obtener_actividades.php")
+        .then(res => res.json())
+        .then(data => {
+
+            const cont = document.getElementById("contenedorActividades");
+            if (!cont) return;
+
+            cont.innerHTML = "";
+
+            data.forEach(a => {
+
+                const imagen = a.imagen 
+                    ? a.imagen 
+                    : "https://via.placeholder.com/300x200?text=" + a.nombre;
+
+                cont.innerHTML += `
+                    <div class="col s12 m6 l4">
+                        <div class="card hoverable">
+
+                            <div class="card-image">
+                                <img src="${imagen}" alt="${a.nombre}">
+                            </div>
+
+                            <div class="card-content">
+                                <span class="card-title">${a.nombre}</span>
+                                <p>${a.descripcion}</p>
                             </div>
 
                         </div>
