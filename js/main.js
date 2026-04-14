@@ -27,25 +27,40 @@ function loadDarkMode() {
 // Agregar botón de alternancia (menú hamburguesa si existe; si no, flotante)
 function addToggleButton() {
     const sidenav = document.querySelector('.sidenav');
-    const toggleBtn = document.createElement('button');
-    toggleBtn.type = 'button';
-    toggleBtn.innerHTML = '🌙';
-    toggleBtn.classList.add('toggle-btn');
-    toggleBtn.setAttribute('aria-label', 'Cambiar entre modo claro y oscuro');
-    toggleBtn.addEventListener('click', toggleDarkMode);
+    const desktopMenu = document.querySelector('nav .nav-wrapper .container > ul.right.hide-on-med-and-down');
+
+    const crearBoton = () => {
+        const toggleBtn = document.createElement('button');
+        toggleBtn.type = 'button';
+        toggleBtn.innerHTML = '🌙';
+        toggleBtn.classList.add('toggle-btn');
+        toggleBtn.setAttribute('aria-label', 'Cambiar entre modo claro y oscuro');
+        toggleBtn.addEventListener('click', toggleDarkMode);
+        return toggleBtn;
+    };
+
+    if (desktopMenu) {
+        const toggleBtnDesktop = crearBoton();
+        toggleBtnDesktop.classList.add('toggle-btn--desktop');
+        const liDesktop = document.createElement('li');
+        liDesktop.appendChild(toggleBtnDesktop);
+        desktopMenu.appendChild(liDesktop);
+    }
 
     if (sidenav) {
-        toggleBtn.classList.add('toggle-btn--sidenav');
-        const li = document.createElement('li');
-        li.appendChild(toggleBtn);
-        sidenav.appendChild(li);
-    } else {
-        toggleBtn.classList.add('toggle-btn--floating');
-        toggleBtn.style.position = 'fixed';
-        toggleBtn.style.top = '20px';
-        toggleBtn.style.right = '20px';
-        toggleBtn.style.zIndex = '1000';
-        document.body.appendChild(toggleBtn);
+        const toggleBtnSidenav = crearBoton();
+        toggleBtnSidenav.classList.add('toggle-btn--sidenav');
+        const liSidenav = document.createElement('li');
+        liSidenav.appendChild(toggleBtnSidenav);
+        sidenav.appendChild(liSidenav);
+    } else if (!desktopMenu) {
+        const toggleBtnFloating = crearBoton();
+        toggleBtnFloating.classList.add('toggle-btn--floating');
+        toggleBtnFloating.style.position = 'fixed';
+        toggleBtnFloating.style.top = '20px';
+        toggleBtnFloating.style.right = '20px';
+        toggleBtnFloating.style.zIndex = '1000';
+        document.body.appendChild(toggleBtnFloating);
     }
 }
 
@@ -311,7 +326,7 @@ function cargarTalleresCards() {
                         <div class="card hoverable">
 
                             <div class="card-image">
-                                <img src="${imagen}" alt="${t.nombre}">
+                                <img src="${imagen}" alt="${t.nombre}" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/300x200?text=Sin+imagen';">
                             </div>
 
                             <div class="card-content">
@@ -348,7 +363,7 @@ function cargarActividadesCards() {
                         <div class="card hoverable">
 
                             <div class="card-image">
-                                <img src="${imagen}" alt="${a.nombre}">
+                                <img src="${imagen}" alt="${a.nombre}" loading="lazy" onerror="this.onerror=null;this.src='https://via.placeholder.com/300x200?text=Sin+imagen';">
                             </div>
 
                             <div class="card-content">

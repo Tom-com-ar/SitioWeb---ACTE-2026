@@ -1,6 +1,7 @@
 <?php
 session_start();
 $usuarioLogueado = isset($_SESSION["usuario_id"]);
+$contactoEstado = $_GET["contacto"] ?? "";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -130,26 +131,35 @@ $usuarioLogueado = isset($_SESSION["usuario_id"]);
                     <div class="card">
                         <div class="card-content">
                             <span class="card-title">Escríbinos</span>
-                            <form action="#" method="post">
+                            <?php if ($contactoEstado === "ok"): ?>
+                                <div class="card-panel green lighten-4 green-text text-darken-4">
+                                    Mensaje enviado correctamente.
+                                </div>
+                            <?php elseif ($contactoEstado === "error"): ?>
+                                <div class="card-panel red lighten-4 red-text text-darken-4">
+                                    Ocurrió un error al enviar el mensaje. Inténtalo de nuevo.
+                                </div>
+                            <?php endif; ?>
+                            <form action="php/guardar_contacto.php" method="post">
                                 <div class="row">
                                     <div class="input-field col s12 m6">
-                                        <input id="nombre" type="text" class="validate" required>
+                                        <input id="nombre" name="nombre" type="text" class="validate" required>
                                         <label for="nombre">Nombre</label>
                                     </div>
                                     <div class="input-field col s12 m6">
-                                        <input id="email" type="email" class="validate" required>
-                                        <label for="email">Correon electrónico</label>
+                                        <input id="email" name="email" type="email" class="validate" required>
+                                        <label for="email">Correo electrónico</label>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="input-field col s12">
-                                        <input id="asunto" type="text" class="validate">
+                                        <input id="asunto" name="asunto" type="text" class="validate">
                                         <label for="asunto">Asunto</label>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="input-field col s12">
-                                        <textarea id="mensaje" class="materialize-textarea" required></textarea>
+                                        <textarea id="mensaje" name="mensaje" class="materialize-textarea" required></textarea>
                                         <label for="mensaje">Mensaje</label>
                                     </div>
                                 </div>

@@ -96,6 +96,21 @@ INSERT INTO `inscripciones` (`id`, `usuario_id`, `taller_id`, `nombre`, `email`,
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `contactos`
+--
+
+CREATE TABLE `contactos` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `asunto` varchar(150) DEFAULT NULL,
+  `mensaje` text NOT NULL,
+  `fecha_envio` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `talleres`
 --
 
@@ -173,6 +188,12 @@ ALTER TABLE `talleres`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `contactos`
+--
+ALTER TABLE `contactos`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
@@ -206,6 +227,12 @@ ALTER TABLE `inscripciones`
 --
 ALTER TABLE `talleres`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `contactos`
+--
+ALTER TABLE `contactos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`

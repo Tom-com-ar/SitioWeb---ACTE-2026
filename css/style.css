@@ -130,6 +130,38 @@ nav .nav-wrapper {
     flex-shrink: 0;
 }
 
+.toggle-btn--desktop {
+    margin: 0 0 0 6px;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card.hoverable {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.card .card-image {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+}
+
+.card .card-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.card .card-content {
+    flex: 1 1 auto;
+}
+
 .card {
     background-color: var(--card-bg) !important;
     color: var(--text-color) !important;
@@ -159,14 +191,16 @@ nav .nav-wrapper .material-icons {
 
 input[type=text],
 input[type=email],
-input[type=password] {
+input[type=password],
+textarea.materialize-textarea {
     color: var(--text-color) !important;
     background-color: var(--bg-color) !important;
 }
 
 input[type=text]:focus,
 input[type=email]:focus,
-input[type=password]:focus {
+input[type=password]:focus,
+textarea.materialize-textarea:focus {
     border-bottom-color: var(--btn-bg) !important;
     box-shadow: 0 1px 0 0 var(--btn-bg) !important;
 }
@@ -231,4 +265,38 @@ input[type=password]:focus {
 
 .btn.neon-btn {
     font-weight: 700;
+}
+
+/* En tablets ymóviles: una sola columna para evitar huecos laterales */
+@media only screen and (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+    }
+
+    #contenedorTalleres > .col,
+    #contenedorActividades > .col {
+        width: 100% !important;
+        margin-left: 0 !important;
+    }
+}
+
+/* Ajuste extra  320px */
+@media only screen and (max-width: 360px) {
+    .container {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+    }
+
+    .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    #contenedorTalleres > .col,
+    #contenedorActividades > .col {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
 }
