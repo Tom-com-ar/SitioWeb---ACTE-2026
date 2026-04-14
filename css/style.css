@@ -267,6 +267,65 @@ textarea.materialize-textarea:focus {
     font-weight: 700;
 }
 
+/* Pantallas de login y registro */
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 12px;
+}
+
+.auth-shell {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 540px;
+    padding: 8px 10px 18px;
+    margin: 0 !important;
+    box-sizing: border-box;
+}
+
+.auth-row {
+    margin-bottom: 0;
+}
+
+.auth-submit {
+    margin-top: 20px;
+}
+
+.auth-actions {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.auth-link {
+    color: #7ed8ff !important;
+    font-weight: 600;
+}
+
+.auth-link:hover {
+    text-decoration: underline;
+}
+
+@media only screen and (max-width: 600px) {
+    .auth-page {
+        padding: 16px 8px;
+    }
+
+    .auth-card {
+        max-width: 100%;
+        padding: 8px 8px 14px;
+    }
+}
+
 /* En tablets ymóviles: una sola columna para evitar huecos laterales */
 @media only screen and (max-width: 768px) {
     body {

@@ -12,10 +12,10 @@
 
 </head>
 
-<body>
+<body class="auth-page">
 
-    <div class="row" style="width:100%; max-width:400px;">
-        <form action="../php/login.php" method="POST" class="col s12 card-panel">
+    <div class="auth-shell">
+        <form action="../php/login.php" method="POST" class="card-panel auth-card">
 
             <h5 class="center-align">Iniciar Sesión</h5>
 
@@ -35,6 +35,15 @@
                 <button class="btn blue waves-effect waves-light" type="submit">
                     Ingresar
                 </button>
+            </div>
+
+            <div class="auth-actions">
+                <a href="../index.php" class="btn-flat waves-effect auth-link">
+                    ← Volver al inicio
+                </a>
+                <a href="registro.html" class="auth-link">
+                    ¿No tenés cuenta? Registrate
+                </a>
             </div>
 
         </form>
