@@ -204,3 +204,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
     window.addEventListener("online", sincronizar);
 });
+
+
+function cargarTalleresCards() {
+
+    fetch("php/obtener_talleres.php")
+        .then(res => res.json())
+        .then(data => {
+
+            const cont = document.getElementById("contenedorTalleres");
+            if (!cont) return;
+
+            cont.innerHTML = "";
+
+            data.forEach(t => {
+
+                const imagen = t.imagen 
+                    ? t.imagen 
+                    : "https://via.placeholder.com/300x200?text=" + t.nombre;
+
+                cont.innerHTML += `
+                    <div class="col s12 m6 l4">
+                        <div class="card hoverable">
+
+                            <div class="card-image">
+                                <img src="${imagen}" alt="${t.nombre}">
+                            </div>
+
+                            <div class="card-content">
+                                <span class="card-title">${t.nombre}</span>
+                                <p>${t.descripcion}</p>
+                            </div>
+
+                            <div class="card-action">
+                                <a href="#">Más información</a>
+                            </div>
+
+                        </div>
+                    </div>
+                `;
+            });
+        });
+}

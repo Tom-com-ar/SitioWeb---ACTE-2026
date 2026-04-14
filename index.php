@@ -51,53 +51,8 @@
         <div class="container" id="talleres">
             <h4 class="center-align">Talleres</h4>
 
-            <div class="row">
+            <div class="row" id="contenedorTalleres"></div>
 
-                <div class="col s12 m6 l4">
-                    <div class="card hoverable">
-                        <div class="card-image">
-                            <img src="https://via.placeholder.com/300x200?text=Taller+1" alt="Taller 1">
-                        </div>
-                        <div class="card-content">
-                            <span class="card-title">Taller 1</span>
-                            <p>Descripción del taller 1.</p>
-                        </div>
-                        <div class="card-action">
-                            <a href="#">Más información</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col s12 m6 l4">
-                    <div class="card hoverable">
-                        <div class="card-image">
-                            <img src="https://via.placeholder.com/300x200?text=Taller+2" alt="Taller 2">
-                        </div>
-                        <div class="card-content">
-                            <span class="card-title">Taller 2</span>
-                            <p>Descripción del taller 2.</p>
-                        </div>
-                        <div class="card-action">
-                            <a href="#">Más información</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col s12 m6 l4">
-                    <div class="card hoverable">
-                        <div class="card-image">
-                            <img src="https://via.placeholder.com/300x200?text=Actividad+1" alt="Actividad 1">
-                        </div>
-                        <div class="card-content">
-                            <span class="card-title">Actividad 1</span>
-                            <p>Descripción de la actividad 1.</p>
-                        </div>
-                        <div class="card-action">
-                            <a href="#">Más información</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="container" id="actividades">
             <h4 class="center-align">Actividades</h4>
@@ -262,7 +217,11 @@
             const instances = M.Sidenav.init(elems, {
                 edge: 'left',
                 draggable: true
+
             });
+
+            
+            cargarTalleresCards();
 
             const links = document.querySelectorAll('.sidenav a');
             links.forEach(link => {
