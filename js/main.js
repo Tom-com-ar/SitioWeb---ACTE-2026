@@ -96,3 +96,111 @@ document.addEventListener('DOMContentLoaded', () => {
     validarRegistro();
     mostrarErroresURL();
 });
+
+
+let db;
+
+const request = indexedDB.open("InscripcionesDB", 1);
+
+request.onupgradeneeded = function (e) {
+    db = e.target.result;
+    db.createObjectStore("pendientes", { autoIncrement: true });
+};
+
+request.onsuccess = function (e) {
+    db = e.target.result;
+    sincronizar();
+};
+
+function guardarLocal(data) {
+    const tx = db.transaction("pendientes", "readwrite");
+    tx.objectStore("pendientes").add(data);
+}
+
+
+function cargarTalleres() {
+    fetch("php/obtener_talleres.php")
+        .then(res => res.json())
+        .then(data => {
+            const cont = document.getElementById("listaTalleres");
+            cont.innerHTML = "";
+
+            data.forEach(t => {
+                cont.innerHTML += `
+                    <p>
+                        <label>
+                            <input type="checkbox" value="${t.id}" />
+                            <span>${t.nombre}</span>
+                        </label>
+                    </p>
+                `;
+            });
+        });
+}
+
+
+function initFormulario() {
+
+    const form = document.getElementById("formInscripcion");
+    if (!form) return;
+
+    form.addEventListener("submit", e => {
+        e.preventDefault();
+
+        const nombre = document.getElementById("ins_nombre").value;
+        const email = document.getElementById("ins_email").value;
+        const telefono = document.getElementById("ins_telefono").value;
+
+        const talleres = [];
+        document.querySelectorAll("#listaTalleres input:checked")
+            .forEach(cb => talleres.push(cb.value));
+
+        const data = { nombre, email, telefono, talleres };
+
+        if (navigator.onLine) {
+            enviarServidor(data);
+        } else {
+            guardarLocal(data);
+            alert("Guardado sin conexión");
+        }
+    });
+}
+
+
+function enviarServidor(data) {
+
+    fetch("php/guardar_inscripcion.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    })
+        .then(res => res.text())
+        .then(() => alert("Inscripción exitosa"));
+}
+
+
+function sincronizar() {
+
+    if (!navigator.onLine) return;
+
+    const tx = db.transaction("pendientes", "readwrite");
+    const store = tx.objectStore("pendientes");
+
+    store.openCursor().onsuccess = function (e) {
+        const cursor = e.target.result;
+
+        if (cursor) {
+            enviarServidor(cursor.value);
+            store.delete(cursor.key);
+            cursor.continue();
+        }
+    };
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    cargarTalleres();
+    initFormulario();
+
+    window.addEventListener("online", sincronizar);
+});
